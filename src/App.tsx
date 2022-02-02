@@ -21,15 +21,30 @@ function App() {
 
     const tileset = new Cesium.Cesium3DTileset({
       url: 'https://cesium-api.ankageo.com/api/v1/static/tileset/3/tileset.json',
-      maximumScreenSpaceError: 1,
+      maximumScreenSpaceError: 16,
     });
     viewer.scene.primitives.add(tileset);
     const tileset2 = new Cesium.Cesium3DTileset({
       url: 'https://cesium-api.ankageo.com/api/v1/static/tileset/14/tileset.json',
-      maximumScreenSpaceError: 1,
+      maximumScreenSpaceError: 16,
     });
     viewer.scene.primitives.add(tileset2);
+
+    // tileset 1'e zoom ol.
     viewer.zoomTo(tileset as any);
+    viewer.screenSpaceEventHandler.setInputAction((event) => {
+
+      const c3 = viewer.scene.pickPosition(event.position);
+      // console.log('event', event);
+      // console.log('c3', c3);
+      const carto = Cesium.Cartographic.fromCartesian(c3);
+      const lon = carto.longitude * 180 / Math.PI;
+      const lat = carto.latitude * 180 / Math.PI;
+      const obj = { lon, lat, alt: carto.height };
+      console.log('carto', obj);
+      
+
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
 
     tileset.readyPromise.then(() => {
       const x = 0;
