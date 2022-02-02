@@ -1,16 +1,18 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
   useEffect(() => {
-    new Cesium.Viewer('map');
-  }, [])
+    const viewer = new Cesium.Viewer('map');
+    
+    return () => {
+      viewer.destroy();
+    }
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <div id="map"></div>
-      </header>
+      <div id="map"></div>
     </div>
   );
 }
