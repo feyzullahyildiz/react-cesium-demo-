@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useRef } from 'react';
 import './App.css';
 
 function App() {
+  const mapRef = useRef(document.createElement('div'));
   useEffect(() => {
-    const viewer = new Cesium.Viewer('map', {
+    const viewer = new Cesium.Viewer(mapRef.current, {
       timeline: false,
       geocoder: false,
       homeButton: false,
@@ -24,7 +24,7 @@ function App() {
   }, []);
   return (
     <div className="App">
-      <div id="map"></div>
+      <div className='map' ref={mapRef}></div>
     </div>
   );
 }
