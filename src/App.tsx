@@ -1,70 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import './App.css';
+import { Viewer } from './components/viewer';
 
 function App() {
-  const mapRef = useRef(document.createElement('div'));
-  useEffect(() => {
-    const viewer = new Cesium.Viewer(mapRef.current, {
-      timeline: false,
-      geocoder: false,
-      homeButton: false,
-      infoBox: false,
-      // vrButton: true,
-      animation: false,
-      navigationHelpButton: false,
-      // baseLayerPicker: false,
-      sceneModePicker: false,
-      fullscreenButton: false,
-      selectionIndicator: false,
-    });
-    (viewer as any)._cesiumWidget._creditContainer.style.display = "none";
-
-    const tileset = new Cesium.Cesium3DTileset({
-      url: 'https://cesium-api.ankageo.com/api/v1/static/tileset/3/tileset.json',
-      maximumScreenSpaceError: 16,
-    });
-    viewer.scene.primitives.add(tileset);
-    const tileset2 = new Cesium.Cesium3DTileset({
-      url: 'https://cesium-api.ankageo.com/api/v1/static/tileset/14/tileset.json',
-      maximumScreenSpaceError: 16,
-    });
-    viewer.scene.primitives.add(tileset2);
-
-    // tileset 1'e zoom ol.
-    viewer.zoomTo(tileset as any);
-    viewer.screenSpaceEventHandler.setInputAction((event) => {
-
-      const c3 = viewer.scene.pickPosition(event.position);
-      // console.log('event', event);
-      // console.log('c3', c3);
-      const carto = Cesium.Cartographic.fromCartesian(c3);
-      const lon = carto.longitude * 180 / Math.PI;
-      const lat = carto.latitude * 180 / Math.PI;
-      const obj = { lon, lat, alt: carto.height };
-      console.log('carto', obj);
-      
-
-    }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-
-    tileset.readyPromise.then(() => {
-      const x = 0;
-      const y = 0;
-      const z = -55;
-      const boundingSphere = tileset.boundingSphere;
-      const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
-      const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
-      const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude + x, cartographic.latitude + y, z);
-      const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
-      tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
-    })
-    // viewer.scene
-    return () => {
-      viewer.destroy();
-    }
-  }, []);
+  const isActive = true;
   return (
     <div className="App">
-      <div className='map' ref={mapRef}></div>
+      <Viewer>
+        {/* {isActive && <Tileset url="asdf"></Tileset>} */}
+      </Viewer>
     </div>
   );
 }
