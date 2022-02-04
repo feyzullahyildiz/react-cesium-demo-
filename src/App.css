@@ -1,3 +1,15 @@
-.App, .map {
+.App {
   height: 100%;
+  position: relative;
+}
+
+.top-left {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  z-index: 2;
+  background-color: #c1c1c1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
 }
