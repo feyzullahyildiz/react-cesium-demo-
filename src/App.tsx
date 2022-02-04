@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import { BoxEntity } from './components/boxentity';
 import { Tileset } from './components/tileset';
 import { Viewer } from './components/viewer';
 
@@ -7,6 +8,12 @@ function App() {
   const [isActive, setIsActive] = useState(true);
   const [tilesetId, setTilesetId] = useState(3);
 
+
+  const entityPosition = Cesium.Cartesian3.fromDegrees(28, 41, 100);      // implicit
+  const entityDimentions = new Cesium.Cartesian3(1000, 1000, 1000);       // implicit
+  const entityColor = Cesium.Color.RED;                                   // Primitive Tip
+
+  console.log('UPDATE')
   const url = `https://cesium-api.ankageo.com/api/v1/static/tileset/${tilesetId}/tileset.json`
   return (
     <div className="App">
@@ -17,10 +24,18 @@ function App() {
         <button onClick={() => setTilesetId(tilesetId + 1)}>Id ARTTIR</button>
       </div>
       <Viewer>
-        {/* {isActive && <Tileset url={url}></Tileset>} */}
         <Tileset autoZoom url={url} visible={isActive}></Tileset>
         <Tileset visible={isActive} url="https://cesium-api.ankageo.com/api/v1/static/tileset/14/tileset.json" ></Tileset>
-
+        <BoxEntity
+          position={entityPosition}
+          dimensions={entityDimentions}
+          color={entityColor}
+        />
+        <BoxEntity
+          position={entityPosition}
+          dimensions={new Cesium.Cartesian3(900, 1200, 1200)}
+          color={Cesium.Color.YELLOW}
+        />
       </Viewer>
     </div>
   );
