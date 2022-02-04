@@ -10,7 +10,7 @@ interface Props {
 }
 export const BoxEntity: React.FC<Props> = ({ position, dimensions, color, ...props }) => {
     const viewer = useContext(ViewerContext)!;
-    console.log('BoxEntity propslar güncellendi')
+    // console.log('BoxEntity propslar güncellendi')
     useEffect(() => {
         const box = viewer.entities.add({
             position,
@@ -21,9 +21,9 @@ export const BoxEntity: React.FC<Props> = ({ position, dimensions, color, ...pro
                 outlineColor: Cesium.Color.BLACK,
             },
         } as any);
-        console.log('yeni entity')
+        // console.log('yeni entity')
         return () => {
-            console.log('eski entity öldü')
+            // console.log('eski entity öldü')
             viewer.entities.remove(box);
         }
     }, [viewer, color, dimensions, position])
