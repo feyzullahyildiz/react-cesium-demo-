@@ -18,8 +18,9 @@ function App() {
       </div>
       <Viewer>
         {/* {isActive && <Tileset url={url}></Tileset>} */}
-        <Tileset url={url} visible={isActive}></Tileset>
-        <Tileset url="https://cesium-api.ankageo.com/api/v1/static/tileset/14/tileset.json" visible={isActive}></Tileset>
+        <Tileset autoZoom url={url} visible={isActive}></Tileset>
+        <Tileset visible={isActive} url="https://cesium-api.ankageo.com/api/v1/static/tileset/14/tileset.json" ></Tileset>
+
       </Viewer>
     </div>
   );
