@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { BoxEntity } from './components/boxentity';
+import { CameraTour } from './components/cameratour';
 import { LeftClient } from './components/leftclick';
 import { Tileset } from './components/tileset';
 import { Viewer } from './components/viewer';
@@ -42,14 +43,15 @@ function App() {
         {isActive && <LeftClient logKey='BB' />}
         <LeftClient logKey='CC' /> */}
         <LeftClient logKey='AA' onPick={setPickCoordinate} />
-        {pickCoordinate &&
+        {/* {pickCoordinate &&
 
           <BoxEntity
             position={pickCoordinate}
             dimensions={new Cesium.Cartesian3(100, 100, 100)}
             color={Cesium.Color.YELLOW}
           />
-        }
+        } */}
+        <CameraTour />
       </Viewer>
     </div>
   );

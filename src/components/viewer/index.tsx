@@ -7,8 +7,27 @@ export const Viewer: React.FC = (props) => {
 
     useEffect(() => {
         const v = new Cesium.Viewer(
-            mapRef.current
+            mapRef.current, {
+                // animation: false,
+                homeButton: false,
+                navigationHelpButton: false,
+                infoBox: false,
+                geocoder: false,
+                baseLayerPicker: false,
+                sceneModePicker: false,
+                fullscreenButton: false,
+                selectionIndicator: false,
+                // timeline: false,
+                navigationInstructionsInitiallyVisible: false,
+                imageryProvider: new Cesium.UrlTemplateImageryProvider({
+                    url: 'https://mt3.google.com/vt/lyrs=s@113&hl=tr&x={x}&y={y}&z={z}',
+                    maximumLevel: 22,
+                    minimumLevel: 1
+                })
+            }
         );
+
+        // (v as any)._cesiumWidget._creditContainer.style.display = "none";
         (window as any).viewer = v;
         setViewer(v);
         return () => {
