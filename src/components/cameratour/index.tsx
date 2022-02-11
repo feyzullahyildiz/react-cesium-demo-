@@ -1,14 +1,33 @@
 import React, { useContext, useEffect } from 'react';
 import { ViewerContext } from '../viewer-context';
 
-export const CameraTour = () => {
+const getCartesianFromXYZObj = (obj: any) => {
+    return new Cesium.Cartesian3(obj.x, obj.y, obj.z)
+}
+
+interface Point {
+    x: number, y: number, z: number
+}
+interface CameraPoint {
+    position: Point;
+    direction: Point;
+    up: Point;
+    heading: number
+    roll: number
+    pitch: number
+    time: number
+}
+interface Props {
+    points: CameraPoint[]
+}
+export const CameraTour: React.FC<Props> = ({ points }) => {
     const viewer = useContext(ViewerContext)!;
     useEffect(() => {
-
-        const start = Cesium.JulianDate.fromDate(new Date(2015, 2, 25, 16));
+        const totalTime = points.reduce((a, b) => a + b.time, 5);
+        const start = Cesium.JulianDate.fromDate(new Date(2022, 2, 25, 16));
         const stop = Cesium.JulianDate.addSeconds(
             start,
-            13,
+            totalTime,
             new Cesium.JulianDate()
         );
 
@@ -17,40 +36,32 @@ export const CameraTour = () => {
         viewer.clock.stopTime = stop.clone();
         viewer.clock.currentTime = start.clone();
         viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; //Loop at the end
-        viewer.clock.multiplier = 0.8;
+        viewer.clock.multiplier = 1.8;
         viewer.clock.shouldAnimate = true;
 
         viewer.timeline.zoomTo(start, stop);
 
         const positionProperty = new Cesium.SampledPositionProperty();
-        const pathArray = [
-            {
-                position: new Cesium.Cartesian3(4215809.306382088, 2334438.2573994533, 4164271.9552502357),
-                timeOffset: 0,
-            },
-            {
-                position: new Cesium.Cartesian3(4215708.942831653, 2334423.6255956814, 4164386.1557259825),
-                timeOffset: 8,
-            },
-            {
-                position: new Cesium.Cartesian3(4215685.672611163, 2334418.940918554, 4164412.4950099257),
-                timeOffset: 10,
-            },
-            {
-                position: new Cesium.Cartesian3(4215651.85432512, 2334443.3153966856, 4164432.552722568),
-                timeOffset: 13,
-            },
+        const directionProperty = new Cesium.SampledPositionProperty();
+        const upProperty = new Cesium.SampledPositionProperty();
 
-        ];
+
         const dotEntityList: any[] = [];
-        for (const step of pathArray) {
+        let i = 0;
+        for (const step of points) {
+            const extraTime = i + step.time;
+            console.log('extraTime', extraTime);
             const time = Cesium.JulianDate.addSeconds(
                 start,
-                step.timeOffset,
+                extraTime,
                 new Cesium.JulianDate()
             );
 
-            positionProperty.addSample(time, step.position);
+            i += step.time;
+
+            positionProperty.addSample(time, getCartesianFromXYZObj(step.position));
+            directionProperty.addSample(time, getCartesianFromXYZObj(step.direction));
+            upProperty.addSample(time, getCartesianFromXYZObj(step.up));
             const e = viewer.entities.add({
                 position: step.position,
                 box: {
@@ -63,37 +74,38 @@ export const CameraTour = () => {
             dotEntityList.push(e);
         }
         positionProperty.setInterpolationOptions({
-            interpolationDegree: 5,
-            interpolationAlgorithm:
-                Cesium.LagrangePolynomialApproximation,
+            interpolationDegree: 1,
+            interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
         });
-        const entity = viewer.entities.add({
-            availability: new Cesium.TimeIntervalCollection([
-                new Cesium.TimeInterval({
-                    start: start,
-                    stop: stop,
-                }),
-            ]),
-            position: positionProperty,
-            // box: {
-            //     dimensions: new Cesium.Cartesian3(10, 10, 1),
-            //     material: Cesium.Color.RED,
-            //     outline: true,
-            //     outlineColor: Cesium.Color.BLACK,
-            // },
-            orientation: new Cesium.VelocityOrientationProperty(positionProperty),
-            model: {
-                uri: "Cesium_Air.glb",
-                minimumPixelSize: 64,
-                scale: 0.1
+        directionProperty.setInterpolationOptions({
+            interpolationDegree: 0.01,
+            interpolationAlgorithm: Cesium.HermitePolynomialApproximation,
+        });
+        upProperty.setInterpolationOptions({
+            interpolationDegree: 0.01,
+            interpolationAlgorithm: Cesium.HermitePolynomialApproximation,
+        });
+        // const orientation = new Cesium.VelocityOrientationProperty(positionProperty);
+        const rmCallback = viewer.scene.preRender.addEventListener((scene, time) => {
+            const position = positionProperty.getValue(time) as Cesium.Cartesian3;
+            const direction = directionProperty.getValue(time) as Cesium.Cartesian3;
+            const up = upProperty.getValue(time) as Cesium.Cartesian3;
+            if (Cesium.defined(position)) {
+                viewer.camera.position = position.clone();
             }
-        } as any);
+            if (Cesium.defined(direction)) {
+                viewer.camera.direction = direction.clone();
+            }
+            if (Cesium.defined(up)) {
+                viewer.camera.up = up.clone();
+            }
 
-        console.log('entity', entity);
-        viewer.trackedEntity = entity;
+
+        })
         return () => {
-            (viewer as any).trackedEntity = undefined;
-            viewer.entities.remove(entity);
+            // (viewer as any).trackedEntity = undefined;
+            // viewer.entities.remove(entity);
+            viewer.scene.preRender.removeEventListener(rmCallback);
             for (const e of dotEntityList) {
                 viewer.entities.remove(e);
             }

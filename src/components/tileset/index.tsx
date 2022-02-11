@@ -13,7 +13,8 @@ export const Tileset: React.FC<Props> = ({ url, visible = true, autoZoom = false
     // console.log('props.url', props.url);
     useEffect(() => {
         const t = new Cesium.Cesium3DTileset({
-            url
+            url,
+            maximumScreenSpaceError: 16
         });
         // (t as any).show = visible;
         tileset.current = t;
