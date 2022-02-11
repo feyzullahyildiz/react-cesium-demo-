@@ -85,11 +85,44 @@ export const CameraTour: React.FC<Props> = ({ points }) => {
             interpolationDegree: 0.01,
             interpolationAlgorithm: Cesium.HermitePolynomialApproximation,
         });
+        // const firstPoint = points[0];
+        // const hpr = new Cesium.HeadingPitchRoll(firstPoint.heading - (Math.PI / 2),
+        //     firstPoint.pitch,
+        //     firstPoint.roll
+        // );
+        // const orientation = Cesium.Transforms.headingPitchRollQuaternion(
+        //     new Cesium.Cartesian3(firstPoint.position.x, firstPoint.position.y, firstPoint.position.z),
+        //     hpr
+        // );
+        // const testEntity = viewer.entities.add({
+        //     position: getCartesianFromXYZObj(firstPoint.position),
+        //     orientation: orientation,
+        //     model: {
+        //         uri: "Cesium_Air.glb",
+        //         minimumPixelSize: 64,
+        //         scale: 0.5
+        //     }
+        // } as any);
+        // console.log('testEntity', testEntity);
         // const orientation = new Cesium.VelocityOrientationProperty(positionProperty);
         const rmCallback = viewer.scene.preRender.addEventListener((scene, time) => {
             const position = positionProperty.getValue(time) as Cesium.Cartesian3;
             const direction = directionProperty.getValue(time) as Cesium.Cartesian3;
             const up = upProperty.getValue(time) as Cesium.Cartesian3;
+
+            // const hpr = new Cesium.HeadingPitchRoll(direction.x  - (Math.PI / 2),
+            //     direction.y,
+            //     direction.z
+            // );
+            // const hpr = new Cesium.HeadingPitchRoll(up.x  - (Math.PI / 2),
+            //     up.y,
+            //     up.z
+            // );
+            // const orientation = Cesium.Transforms.headingPitchRollQuaternion(
+            //     new Cesium.Cartesian3(position.x,position.y,position.z),
+            //     hpr
+            // );
+            // (testEntity as any).orientation.setValue(orientation);
             if (Cesium.defined(position)) {
                 viewer.camera.position = position.clone();
             }
@@ -105,6 +138,7 @@ export const CameraTour: React.FC<Props> = ({ points }) => {
         return () => {
             // (viewer as any).trackedEntity = undefined;
             // viewer.entities.remove(entity);
+            // viewer.entities.remove(testEntity);
             viewer.scene.preRender.removeEventListener(rmCallback);
             for (const e of dotEntityList) {
                 viewer.entities.remove(e);
