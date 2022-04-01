@@ -8,7 +8,7 @@ export const Viewer: React.FC = (props) => {
     useEffect(() => {
         const v = new Cesium.Viewer(
             mapRef.current, {
-                // animation: false,
+                animation: true,
                 homeButton: false,
                 navigationHelpButton: false,
                 infoBox: false,
@@ -17,7 +17,7 @@ export const Viewer: React.FC = (props) => {
                 sceneModePicker: false,
                 fullscreenButton: false,
                 selectionIndicator: false,
-                // timeline: false,
+                timeline: false,
                 navigationInstructionsInitiallyVisible: false,
                 imageryProvider: new Cesium.UrlTemplateImageryProvider({
                     url: 'https://mt3.google.com/vt/lyrs=s@113&hl=tr&x={x}&y={y}&z={z}',
