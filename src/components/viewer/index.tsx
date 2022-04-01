@@ -26,7 +26,7 @@ export const Viewer: React.FC = (props) => {
                 })
             }
         );
-
+        v.clock.shouldAnimate = true;
         // (v as any)._cesiumWidget._creditContainer.style.display = "none";
         (window as any).viewer = v;
         setViewer(v);

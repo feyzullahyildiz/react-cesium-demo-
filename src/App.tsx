@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import { AnimationComponent } from './components/animation';
 import { BoxEntity } from './components/boxentity';
 import { CameraTour } from './components/cameratour';
 import { LeftClient } from './components/leftclick';
@@ -27,8 +28,8 @@ function App() {
         <button onClick={() => setTilesetId(tilesetId + 1)}>Id ARTTIR</button>
       </div>
       <Viewer>
-        <Tileset autoZoom url={url} visible={isActive}></Tileset>
-        <Tileset visible={isActive} url="https://cesium-api.ankageo.com/api/v1/static/tileset/14/tileset.json" ></Tileset>
+        {/* <Tileset  url={url} visible={isActive}></Tileset> */}
+        <Tileset autoZoom visible={isActive} url="https://cesium-api.ankageo.com/api/v1/static/tileset/14/tileset.json" ></Tileset>
         <BoxEntity
           position={entityPosition}
           dimensions={entityDimentions}
@@ -51,7 +52,22 @@ function App() {
             color={Cesium.Color.YELLOW}
           />
         } */}
-        <CameraTour />
+        {/* <CameraTour /> */}
+        <AnimationComponent startTimeOffset={0} />
+        <AnimationComponent startTimeOffset={1} />
+        <AnimationComponent startTimeOffset={2} />
+        <AnimationComponent startTimeOffset={3} />
+        <AnimationComponent startTimeOffset={4} />
+        <AnimationComponent startTimeOffset={5} />
+        <AnimationComponent startTimeOffset={6} />
+        <AnimationComponent startTimeOffset={7} />
+        <AnimationComponent startTimeOffset={8} />
+        <AnimationComponent startTimeOffset={9} />
+        <AnimationComponent startTimeOffset={10} />
+        <AnimationComponent startTimeOffset={11} />
+        <AnimationComponent startTimeOffset={12} />
+        <AnimationComponent startTimeOffset={13} />
+        <AnimationComponent startTimeOffset={14} />
       </Viewer>
     </div>
   );
