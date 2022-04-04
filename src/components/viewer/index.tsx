@@ -7,7 +7,7 @@ export const Viewer: React.FC = (props) => {
 
 	useEffect(() => {
 		const v = new Cesium.Viewer(mapRef.current, {
-			// animation: false,
+			animation: true,
 			homeButton: false,
 			navigationHelpButton: false,
 			infoBox: false,
@@ -16,7 +16,7 @@ export const Viewer: React.FC = (props) => {
 			sceneModePicker: false,
 			fullscreenButton: false,
 			selectionIndicator: false,
-			// timeline: false,
+			timeline: false,
 			navigationInstructionsInitiallyVisible: false,
 			imageryProvider: new Cesium.UrlTemplateImageryProvider({
 				url: "https://mt3.google.com/vt/lyrs=s@113&hl=tr&x={x}&y={y}&z={z}",
@@ -24,7 +24,7 @@ export const Viewer: React.FC = (props) => {
 				minimumLevel: 1,
 			}),
 		})
-
+		v.clock.shouldAnimate = true
 		// (v as any)._cesiumWidget._creditContainer.style.display = "none";
 		;(window as any).viewer = v
 		setViewer(v)
@@ -35,9 +35,7 @@ export const Viewer: React.FC = (props) => {
 	return (
 		<>
 			<div style={{ height: "100%" }} ref={mapRef}></div>
-			{viewer && (
-				<ViewerContext.Provider value={viewer}>{props.children}</ViewerContext.Provider>
-			)}
+			{viewer && <ViewerContext.Provider value={viewer}>{props.children}</ViewerContext.Provider>}
 		</>
 	)
 }
