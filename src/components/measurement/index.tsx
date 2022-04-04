@@ -12,13 +12,28 @@ export const Measurement: React.FC<Props> = ({ onPick }) => {
 		const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas)
 
 		handler.setInputAction((event) => {
-			const c3 = viewer.scene.pickPosition(event.position)
+			let c3 = viewer.scene.pickPosition(event.position)
+			let c3Heigth = Cesium.Cartographic.fromCartesian(c3).height
+			if (c3Heigth < 0) {
+				c3 = viewer.camera.pickEllipsoid(event.position)
+				c3Heigth = Cesium.Cartographic.fromCartesian(c3).height
+				const globeHeight = viewer.scene.globe.getHeight(
+					Cesium.Cartographic.fromCartesian(c3)
+				)
+				if (c3Heigth < globeHeight) {
+					const { height, longitude, latitude } = Cesium.Cartographic.fromCartesian(c3)
+					c3 = Cesium.Cartesian3.fromRadians(longitude, latitude, globeHeight)
+				}
+			}
+
 			const { longitude, latitude, height } = Cesium.Cartographic.fromCartesian(c3)
+			console.log("height", height)
 			// console.log("longitude, latitude, height", longitude, latitude, height)
 			const c3OffsetZ = Cesium.Cartesian3.fromRadians(longitude, latitude, height + 0.1)
 			//const c3OffsetZ = c3.clone()
 
 			setPointArray([...pointArray, c3OffsetZ])
+			console.log(pointArray)
 		}, Cesium.ScreenSpaceEventType.LEFT_CLICK)
 
 		handler.setInputAction(() => {
@@ -36,6 +51,13 @@ export const Measurement: React.FC<Props> = ({ onPick }) => {
 	}, [pointArray])
 
 	useEffect(() => {
+		// console.log("pointArray", pointArray)
+
+		// for (const p of pointArray) {
+		// 	const carto = Cesium.Cartographic.fromCartesian(p)
+		// 	const h = viewer.scene.globe.getHeight(carto)
+		// 	console.log("carto height, h", carto.height, h)
+		// }
 		const entityArray = pointArray.map((p) => {
 			return viewer.entities.add({
 				position: p,

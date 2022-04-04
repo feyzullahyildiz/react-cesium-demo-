@@ -1,9 +1,12 @@
 import React, { useState } from "react"
 import "./App.css"
+import { AreaMeasure } from "./components/areameasure"
 import { BoxEntity } from "./components/boxentity"
 import { CameraTour } from "./components/cameratour"
 import { CameraTourDebug } from "./components/cameratour/debug"
+import { CustomeMeasure } from "./components/customMeasure"
 import { EntityTour } from "./components/entitytour"
+import { Height } from "./components/height"
 import { InitCameraPosition } from "./components/initcameraposition"
 import { LeftClient } from "./components/leftclick"
 import { Measurement } from "./components/measurement"
@@ -11,6 +14,9 @@ import { Tileset } from "./components/tileset"
 import { Viewer } from "./components/viewer"
 
 function App() {
+	const [distanceMode, setDistanceMode] = useState(false)
+	const [customeMeasure, setCustomeMeasure] = useState(false)
+	const [areaMeasure, setAreaMeasure] = useState(true)
 	const [isActive, setIsActive] = useState(true)
 	const [tilesetId, setTilesetId] = useState(3)
 	const [pickCoordinate, setPickCoordinate] = useState<Cesium.Cartesian3 | null>(null)
@@ -432,6 +438,30 @@ function App() {
 				<button onClick={() => setIsActive(!isActive)}>KAPAT AÇ</button>
 				tilesetId: {tilesetId}
 				<button onClick={() => setTilesetId(tilesetId + 1)}>Id ARTTIR</button>
+				<label>
+					Distance
+					<input
+						type="checkbox"
+						checked={distanceMode}
+						onChange={(e) => setDistanceMode(e.target.checked)}
+					/>
+				</label>
+				<label>
+					CUstomMeasure
+					<input
+						type="checkbox"
+						checked={customeMeasure}
+						onChange={(e) => setCustomeMeasure(e.target.checked)}
+					/>
+				</label>
+				<label>
+					Area
+					<input
+						type="checkbox"
+						checked={areaMeasure}
+						onChange={(e) => setAreaMeasure(e.target.checked)}
+					/>
+				</label>
 			</div>
 			<Viewer>
 				<InitCameraPosition
@@ -464,7 +494,7 @@ function App() {
         {isActive && <LeftClient logKey='BB' />}
         <LeftClient logKey='CC' /> */}
 				{/* <LeftClient logKey="AA" onPick={setPickCoordinate} /> */}
-				<Measurement />
+				{distanceMode && <Measurement />}
 				{/* {pickCoordinate &&
 
           <BoxEntity
@@ -476,6 +506,9 @@ function App() {
 				{/* <CameraTourDebug initialPoints={points} /> */}
 				{/* <CameraTour points={points} /> */}
 				{/* <EntityTour /> */}
+				{/* <Height /> */}
+				{areaMeasure && <AreaMeasure />}
+				{customeMeasure && <CustomeMeasure />}
 			</Viewer>
 		</div>
 	)
