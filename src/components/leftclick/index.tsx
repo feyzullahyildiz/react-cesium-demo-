@@ -27,8 +27,8 @@ export const LeftClient: React.FC<Props> = ({ logKey, onPick }) => {
 
 		handler.setInputAction((event) => {
 			// console.log(logKey, 'position', event.position)
-			//const c3 = viewer.scene.pickPosition(event.position);
-			const c3 = viewer.camera.pickEllipsoid(event.position)
+			const c3 = viewer.scene.pickPosition(event.position)
+			//const c3 = viewer.camera.pickEllipsoid(event.position)
 			const carto = Cesium.Cartographic.fromCartesian(c3)
 			//console.log("carto.height", carto.height)
 			if (onPick) {

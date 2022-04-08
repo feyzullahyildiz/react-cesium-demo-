@@ -18,11 +18,7 @@ export const CameraTour = () => {
 		const positionProperty = new Cesium.SampledPositionProperty()
 		const pathArray = [
 			{
-				position: new Cesium.Cartesian3(
-					4215830.354553322,
-					2334429.0086329756,
-					4164260.00020717
-				),
+				position: new Cesium.Cartesian3(4215830.354553322, 2334429.0086329756, 4164260.00020717),
 				timeOffset: 0,
 			},
 			{
@@ -30,37 +26,21 @@ export const CameraTour = () => {
 				timeOffset: 3,
 			},
 			{
-				position: new Cesium.Cartesian3(
-					4215708.942831653,
-					2334423.6255956814,
-					4164390.1557259825
-				),
+				position: new Cesium.Cartesian3(4215708.942831653, 2334423.6255956814, 4164390.1557259825),
 				timeOffset: 8,
 			},
 			{
-				position: new Cesium.Cartesian3(
-					4215685.672611163,
-					2334418.940918554,
-					4164420.4950099257
-				),
+				position: new Cesium.Cartesian3(4215685.672611163, 2334418.940918554, 4164420.4950099257),
 				timeOffset: 10,
 			},
 			{
-				position: new Cesium.Cartesian3(
-					4215651.85432512,
-					2334443.3153966856,
-					4164440.552722568
-				),
+				position: new Cesium.Cartesian3(4215651.85432512, 2334443.3153966856, 4164440.552722568),
 				timeOffset: 13,
 			},
 		]
 		const dotEntityList: any[] = []
 		for (const step of pathArray) {
-			const time = Cesium.JulianDate.addSeconds(
-				start,
-				step.timeOffset,
-				new Cesium.JulianDate()
-			)
+			const time = Cesium.JulianDate.addSeconds(start, step.timeOffset, new Cesium.JulianDate())
 
 			positionProperty.addSample(time, step.position)
 			const e = viewer.entities.add({

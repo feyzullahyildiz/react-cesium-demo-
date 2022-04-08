@@ -66,7 +66,7 @@ function App() {
 		const lat = (coordRadi.latitude * 180) / Math.PI
 		const lon = (coordRadi.longitude * 180) / Math.PI
 		//console.log(`[${lon}, ${lat}, ${coordRadi.height}]`)
-		setPoints([...points, [lon, lat, 0]])
+		setPoints([...points, [lon, lat, coordRadi.height]])
 	}
 	useEffect(() => {
 		//console.log("points", points)
